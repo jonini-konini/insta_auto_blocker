@@ -2,12 +2,12 @@ import pandas as pd
 import io
 
 df = pd.read_csv('profile_list.csv')
+blocked_terms = open('BlockedBios.txt', 'r', encoding="utf-8").read().split(",")
 
 def profile_check():
+    handle = df[[df['Handle']]]
     for row in df.iterrows():
-        if row['PFP'] == 'Yes':
-            block_factor = 0
-        elif row["PFP"] == 'No':
+        if row["PFP"] == 'No':
          block_factor += 50
         num_follewers = df[[df['Followers']]]
         num_following = df[[df['Following']]]
@@ -16,16 +16,14 @@ def profile_check():
             block_factor += 50
         elif follow_ratio >= 0.1 and follow_ratio < 0.3:
             block_factor += 20
-        has_bio = input("does the person have a bio? y/n:")
-        if has_bio == "n":
-            block_factor += 40
-        elif has_bio == "y":
-            dm = input("enter the bio info:")
-        if dm == "DM for collabs ":
-            block_factor += 20
-        if block_factor >= 150:
+        bio = df[[df['BIO']]]
+        for term in blocked_terms:
+            if term + " " in bio or " " + term in bio:
+                block_factor += 40
+
+        if block_factor >= 110:
             print("blocked")
-        elif block_factor < 150 and block_factor >= 100:
+        elif block_factor < 110 and block_factor >= 60:
             creation_time = int(input("how many days ago was the account created?:"))
         if creation_time < 10:
             print("Account: " + handle + " is blocked.")
@@ -34,7 +32,7 @@ def profile_check():
             if similar_acc == "y":
                 print("Account: " + handle + " is blocked.")
             elif similar_acc == "n":
-                print("allowed")
+                print("allowed")                                                                        
         else:
             print("allowed")
 
