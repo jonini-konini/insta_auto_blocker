@@ -24,15 +24,15 @@ def profile_check():
         if block_factor >= 110:
             print("blocked")
         elif block_factor < 110 and block_factor >= 60:
-            creation_time = int(input("how many days ago was the account created?:"))
+            creation_time = df[[df['Days Since Created']]]
         if creation_time < 10:
             print("Account: " + handle + " is blocked.")
         elif creation_time >= 10:
-            similar_acc = input("does the person have a similar name/pfp to another account? y/n:")
-            if similar_acc == "y":
+            duplicate_rows = df[df.duplicated(subset=['User Name'], keep=False)]
+            if not duplicate_rows.empty:
                 print("Account: " + handle + " is blocked.")
-            elif similar_acc == "n":
-                print("allowed")                                                                        
+            else :
+                print("Account: " + handle + " may require further inspection.")                                                                        
         else:
             print("allowed")
 
