@@ -28,11 +28,11 @@ def profile_check():
         elif block_factor < 150 and block_factor >= 100:
             creation_time = int(input("how many days ago was the account created?:"))
         if creation_time < 10:
-            print("blocked")
+            print("Account: " + handle + " is blocked.")
         elif creation_time >= 10:
             similar_acc = input("does the person have a similar name/pfp to another account? y/n:")
             if similar_acc == "y":
-                print("blocked")
+                print("Account: " + handle + " is blocked.")
             elif similar_acc == "n":
                 print("allowed")
         else:
